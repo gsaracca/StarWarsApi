@@ -25,6 +25,7 @@ artifacts/
 !**/[Pp]ackages/build/
 
 ## ── .NET ─────────────────────────────────────────────────────────────────────
+.dotnet/
 project.assets.json
 *.cache
 *.tmp
