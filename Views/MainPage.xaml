@@ -7,317 +7,606 @@
     Background="{StaticResource SpaceBlackBrush}">
 
     <Page.Resources>
-        <conv:HexStringToBrushConverter         x:Key="HexToBrush"         />
-        <conv:BoolToVisibilityConverter          x:Key="BoolToVis"          />
-        <conv:InverseBoolToVisibilityConverter   x:Key="InvBoolToVis"       />
-        <conv:StringToImageSourceConverter       x:Key="StringToImageSource" />
+        <conv:HexStringToBrushConverter x:Key="HexToBrush" />
+        <conv:BoolToVisibilityConverter x:Key="BoolToVis" />
+        <conv:InverseBoolToVisibilityConverter x:Key="InvBoolToVis" />
+        <conv:StringToImageSourceConverter x:Key="StringToImageSource" />
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"  />    <!-- TitleBar drag region     -->
-            <RowDefinition Height="Auto"/>    <!-- Header / Logo            -->
-            <RowDefinition Height="Auto"/>    <!-- Search bar               -->
-            <RowDefinition Height="Auto"/>    <!-- Quick-search chips       -->
-            <RowDefinition Height="*"   />    <!-- Main content area        -->
-            <RowDefinition Height="Auto"/>    <!-- Status bar               -->
+            <RowDefinition Height="44" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- ─── Title Bar drag region ───────────────────────────────────── -->
-        <Border Grid.Row="0"
-                x:Name="TitleBarDragArea"
-                Background="{StaticResource SpaceBlackBrush}" />
+        <Border x:Name="TitleBarDragArea"
+                Grid.Row="0"
+                Background="{StaticResource TransparentBrush}" />
 
-        <!-- ─── App Header ───────────────────────────────────────────────── -->
-        <StackPanel Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    Padding="0,24,0,28"
-                    Spacing="10">
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Auto">
+            <Grid Padding="48,24,48,32">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="★  STAR WARS EXPLORER  ★"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource StarWarsYellowBrush}"
-                       HorizontalAlignment="Center"
-                       CharacterSpacing="250" />
+                <Border Grid.Row="0"
+                        Padding="32"
+                        CornerRadius="28"
+                        BorderBrush="{StaticResource BorderMediumBrush}"
+                        BorderThickness="1">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF0D1528" Offset="0" />
+                            <GradientStop Color="#FF111111" Offset="0.55" />
+                            <GradientStop Color="#FF211600" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
 
-            <TextBlock Text="Explore the galaxy — characters · films · starships · vehicles · species · planets"
-                       FontSize="13"
-                       Foreground="{StaticResource TextSecondaryBrush}"
-                       HorizontalAlignment="Center" />
-        </StackPanel>
+                    <Grid ColumnSpacing="24" RowSpacing="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1.3*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-        <!-- ─── Search Bar ────────────────────────────────────────────────── -->
-        <Grid Grid.Row="2" Margin="80,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"    />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="14">
+                            <Border Padding="12,6"
+                                    HorizontalAlignment="Left"
+                                    CornerRadius="999"
+                                    Background="#22FFE81F"
+                                    BorderBrush="{StaticResource BorderSubtleBrush}"
+                                    BorderThickness="1">
+                                <TextBlock Text="STAR WARS KNOWLEDGE CONSOLE"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource StarWarsYellowBrush}"
+                                           CharacterSpacing="120" />
+                            </Border>
 
-            <!-- AutoSuggestBox with Star Wars styling -->
-            <Border Grid.Column="0"
-                    CornerRadius="8,0,0,8"
-                    BorderThickness="2,2,0,2"
-                    BorderBrush="{StaticResource StarWarsYellowBrush}"
-                    Background="{StaticResource SpaceSurfaceBrush}">
-                <AutoSuggestBox
-                    x:Name="SearchBox"
-                    PlaceholderText="Search the galaxy…  e.g. Tatooine · Millennium Falcon · Darth Vader"
-                    Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    ItemsSource="{x:Bind ViewModel.FilteredSuggestions, Mode=OneWay}"
-                    Foreground="{StaticResource TextPrimaryBrush}"
-                    FontSize="15"
-                    BorderThickness="0"
-                    Background="Transparent"
-                    Padding="14,10"
-                    QuerySubmitted="SearchBox_QuerySubmitted"
-                    TextChanged="SearchBox_TextChanged"
-                    SuggestionChosen="SearchBox_SuggestionChosen" />
-            </Border>
+                            <TextBlock Text="Search the galaxy with a cleaner, faster desktop experience."
+                                       FontSize="38"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       TextWrapping="WrapWholeWords" />
 
-            <!-- Search Button -->
-            <Button Grid.Column="1"
-                    Content="  Search  "
-                    Command="{x:Bind ViewModel.SearchCommand}"
-                    Background="{StaticResource StarWarsYellowBrush}"
-                    Foreground="#000000"
-                    FontSize="14"
-                    FontWeight="SemiBold"
-                    CornerRadius="0,8,8,0"
-                    Padding="20,0"
-                    MinHeight="48"
-                    BorderThickness="0" />
-        </Grid>
+                            <TextBlock Text="Find characters, films, planets, species, vehicles and starships from a single professional search surface."
+                                       MaxWidth="760"
+                                       FontSize="15"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="WrapWholeWords" />
+                        </StackPanel>
 
-        <!-- ─── Quick-Search Chips ────────────────────────────────────────── -->
-        <StackPanel Grid.Row="3" Margin="80,14,80,0" Spacing="6">
+                        <Border Grid.Column="1"
+                                Grid.RowSpan="3"
+                                Padding="24"
+                                CornerRadius="24"
+                                Background="#22131F36"
+                                BorderBrush="#33FFFFFF"
+                                BorderThickness="1">
+                            <StackPanel Spacing="18">
+                                <TextBlock Text="Mission Control"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}" />
 
-            <TextBlock Text="Quick searches:"
-                       FontSize="11"
-                       Foreground="{StaticResource TextMutedBrush}" />
+                                <Grid ColumnSpacing="12" RowSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-            <ScrollViewer HorizontalScrollMode="Auto"
-                          VerticalScrollMode="Disabled"
-                          HorizontalScrollBarVisibility="Hidden">
-                <ItemsRepeater x:Name="ExampleChipsRepeater"
-                               ItemsSource="{x:Bind ViewModel.ExampleQueries}">
-                    <ItemsRepeater.Layout>
-                        <StackLayout Orientation="Horizontal" Spacing="6" />
-                    </ItemsRepeater.Layout>
-                    <ItemsRepeater.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <Button Content="{x:Bind}"
-                                    Click="ExampleChip_Click"
-                                    Padding="12,4"
-                                    CornerRadius="12"
-                                    Background="{StaticResource SpaceSurfaceVariantBrush}"
-                                    Foreground="{StaticResource StarWarsYellowBrush}"
+                                    <Border Grid.Row="0"
+                                            Grid.Column="0"
+                                            Padding="16"
+                                            CornerRadius="18"
+                                            Background="#1CFFFFFF">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="Results"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}" />
+                                            <TextBlock Text="{x:Bind ViewModel.TotalResultsText, Mode=OneWay}"
+                                                       FontSize="24"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource StarWarsYellowBrush}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Row="0"
+                                            Grid.Column="1"
+                                            Padding="16"
+                                            CornerRadius="18"
+                                            Background="#1CFFFFFF">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="Categories"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}" />
+                                            <TextBlock Text="{x:Bind ViewModel.CategoryCountText, Mode=OneWay}"
+                                                       FontSize="24"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Row="1"
+                                            Grid.ColumnSpan="2"
+                                            Padding="16"
+                                            CornerRadius="18"
+                                            Background="#1CFFFFFF">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="Current focus"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}" />
+                                            <TextBlock Text="{x:Bind ViewModel.SearchSummary, Mode=OneWay}"
+                                                       FontSize="14"
+                                                       TextWrapping="WrapWholeWords"
+                                                       Foreground="{StaticResource TextPrimaryBrush}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Grid Grid.Row="1"
+                              Grid.Column="0"
+                              Margin="0,12,0,0"
+                              ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    CornerRadius="18"
+                                    Background="#CC111826"
+                                    BorderBrush="{StaticResource BorderMediumBrush}"
+                                    BorderThickness="1">
+                                <AutoSuggestBox
+                                    x:Name="SearchBox"
+                                    PlaceholderText="Search for Tatooine, Millennium Falcon, Darth Vader, Wookiee..."
+                                    Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{x:Bind ViewModel.FilteredSuggestions, Mode=OneWay}"
+                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                    FontSize="15"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Padding="18,14"
+                                    QuerySubmitted="SearchBox_QuerySubmitted"
+                                    TextChanged="SearchBox_TextChanged"
+                                    SuggestionChosen="SearchBox_SuggestionChosen" />
+                            </Border>
+
+                            <Button Grid.Column="1"
+                                    Content="Search"
+                                    Command="{x:Bind ViewModel.SearchCommand}"
+                                    Padding="24,0"
+                                    MinHeight="52"
+                                    CornerRadius="18"
+                                    BorderThickness="0"
+                                    Background="{StaticResource StarWarsYellowBrush}"
+                                    Foreground="#FF000000"
+                                    FontWeight="SemiBold" />
+
+                            <Button Grid.Column="2"
+                                    Content="Clear"
+                                    Command="{x:Bind ViewModel.ClearSearchCommand}"
+                                    Padding="20,0"
+                                    MinHeight="52"
+                                    CornerRadius="18"
                                     BorderBrush="{StaticResource BorderSubtleBrush}"
                                     BorderThickness="1"
-                                    FontSize="12" />
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
-            </ScrollViewer>
-        </StackPanel>
+                                    Background="#221F2430"
+                                    Foreground="{StaticResource TextPrimaryBrush}" />
+                        </Grid>
 
-        <!-- ─── Main Content Area ─────────────────────────────────────────── -->
-        <Grid Grid.Row="4" Margin="0,20,0,0">
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="0"
+                                    Margin="0,8,0,0"
+                                    Spacing="10">
+                            <TextBlock Text="Quick launch"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextMutedBrush}" />
 
-            <!-- Loading State -->
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="18"
-                        Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                              Width="52"
-                              Height="52"
-                              Foreground="{StaticResource StarWarsYellowBrush}" />
-                <TextBlock Text="Scanning the galaxy…"
-                           FontSize="14"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center" />
-            </StackPanel>
-
-            <!-- Welcome State -->
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="14"
-                        Visibility="{x:Bind ViewModel.ShowWelcome, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                <TextBlock Text="🚀"
-                           FontSize="52"
-                           HorizontalAlignment="Center" />
-                <TextBlock Text="May the Force be with your search."
-                           FontSize="20"
-                           FontStyle="Italic"
-                           Foreground="{StaticResource StarWarsYellowBrush}"
-                           HorizontalAlignment="Center" />
-                <TextBlock Text="Type any term above — or click a quick-search chip to begin exploring."
-                           FontSize="13"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center" />
-            </StackPanel>
-
-            <!-- No Results State -->
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="14"
-                        Visibility="{x:Bind ViewModel.HasNoResults, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                <TextBlock Text="🌌"
-                           FontSize="52"
-                           HorizontalAlignment="Center" />
-                <TextBlock Text="These aren't the droids you're looking for."
-                           FontSize="18"
-                           FontStyle="Italic"
-                           Foreground="{StaticResource StarWarsYellowBrush}"
-                           HorizontalAlignment="Center" />
-                <TextBlock Text="No results found in this sector. Try a broader or different term."
-                           FontSize="13"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center" />
-            </StackPanel>
-
-            <!-- Results State -->
-            <ScrollViewer Padding="80,0,80,24"
-                          Visibility="{x:Bind ViewModel.HasResults, Mode=OneWay, Converter={StaticResource BoolToVis}}">
-                <ItemsRepeater ItemsSource="{x:Bind ViewModel.ResultGroups, Mode=OneWay}">
-                    <ItemsRepeater.ItemTemplate>
-                        <DataTemplate x:DataType="vm:SearchResultGroup">
-                            <StackPanel Spacing="14" Margin="0,0,0,36">
-
-                                <!-- Category header row -->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"    />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               Text="{x:Bind CategoryHeader}"
-                                               FontSize="19"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource StarWarsYellowBrush}" />
-                                    <TextBlock Grid.Column="1"
-                                               Text="{x:Bind PageInfo}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource TextMutedBrush}"
-                                               VerticalAlignment="Bottom"
-                                               Margin="0,0,0,2" />
-                                </Grid>
-
-                                <!-- Category separator -->
-                                <Rectangle Height="1"
-                                           Fill="{StaticResource BorderSubtleBrush}"
-                                           Margin="0,-4,0,0" />
-
-                                <!-- Result cards grid -->
-                                <ItemsRepeater ItemsSource="{x:Bind Items}">
+                            <ScrollViewer HorizontalScrollMode="Enabled"
+                                          VerticalScrollMode="Disabled"
+                                          HorizontalScrollBarVisibility="Hidden">
+                                <ItemsRepeater x:Name="ExampleChipsRepeater"
+                                               ItemsSource="{x:Bind ViewModel.ExampleQueries}">
                                     <ItemsRepeater.Layout>
-                                        <UniformGridLayout MinItemWidth="280"
-                                                           ItemsStretch="Fill"
-                                                           MinRowSpacing="12"
-                                                           MinColumnSpacing="12" />
+                                        <StackLayout Orientation="Horizontal" Spacing="8" />
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:SearchResultItem">
-                                            <Border Background="#13131E"
-                                                    CornerRadius="10"
-                                                    BorderThickness="1">
-                                                <Border.BorderBrush>
-                                                    <SolidColorBrush Color="#33FFE81F" />
-                                                </Border.BorderBrush>
-                                                <StackPanel>
-
-                                                    <!-- ── Image area ──────────────────────────
-                                                         Two layers in a Grid:
-                                                         1) Fallback: dark bg + oversized category icon
-                                                         2) Actual image on top (transparent on 404)
-                                                         The outer Border clips both to rounded top corners. -->
-                                                    <Border Height="155"
-                                                            CornerRadius="10,10,0,0"
-                                                            Background="#1A1A2A">
-                                                        <Grid>
-                                                            <!-- Fallback layer (always present, hidden by image on success) -->
-                                                            <TextBlock Text="{x:Bind CategoryIcon}"
-                                                                       FontSize="52"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       Opacity="0.20" />
-
-                                                            <!-- Image layer (transparent/nothing on 404 — fallback shows through) -->
-                                                            <Image Source="{x:Bind ImageUrl, Converter={StaticResource StringToImageSource}}"
-                                                                   Stretch="UniformToFill"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center" />
-                                                        </Grid>
-                                                    </Border>
-
-                                                    <!-- ── Text content ──────────────────────── -->
-                                                    <StackPanel Spacing="7" Padding="14,11,14,14">
-
-                                                        <!-- Category badge -->
-                                                        <Border CornerRadius="4"
-                                                                Padding="7,2"
-                                                                HorizontalAlignment="Left"
-                                                                Background="{x:Bind CategoryAccentHex, Converter={StaticResource HexToBrush}}">
-                                                            <TextBlock Text="{x:Bind CategoryBadge}"
-                                                                       FontSize="10"
-                                                                       FontWeight="SemiBold"
-                                                                       Foreground="#000000"
-                                                                       CharacterSpacing="50" />
-                                                        </Border>
-
-                                                        <!-- Resource name -->
-                                                        <TextBlock Text="{x:Bind Name}"
-                                                                   FontSize="15"
-                                                                   FontWeight="SemiBold"
-                                                                   Foreground="#E1E1EF"
-                                                                   TextWrapping="Wrap"
-                                                                   MaxLines="2" />
-
-                                                        <!-- Subtitle -->
-                                                        <TextBlock Text="{x:Bind Subtitle}"
-                                                                   FontSize="12"
-                                                                   Foreground="#8A8A9A"
-                                                                   TextWrapping="Wrap" />
-
-                                                        <!-- Detail lines -->
-                                                        <StackPanel Spacing="3" Margin="0,4,0,0">
-                                                            <TextBlock Text="{x:Bind Detail1}"
-                                                                       FontSize="11"
-                                                                       Foreground="#5A5A6A" />
-                                                            <TextBlock Text="{x:Bind Detail2}"
-                                                                       FontSize="11"
-                                                                       Foreground="#5A5A6A" />
-                                                            <TextBlock Text="{x:Bind Detail3}"
-                                                                       FontSize="11"
-                                                                       Foreground="#5A5A6A" />
-                                                        </StackPanel>
-
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </Border>
+                                        <DataTemplate x:DataType="x:String">
+                                            <Button Content="{x:Bind}"
+                                                    Click="ExampleChip_Click"
+                                                    Padding="14,6"
+                                                    CornerRadius="999"
+                                                    Background="#1F1C2432"
+                                                    Foreground="{StaticResource StarWarsYellowBrush}"
+                                                    BorderBrush="{StaticResource BorderSubtleBrush}"
+                                                    BorderThickness="1"
+                                                    FontSize="12" />
                                         </DataTemplate>
                                     </ItemsRepeater.ItemTemplate>
                                 </ItemsRepeater>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
-            </ScrollViewer>
+                <Grid Grid.Row="1"
+                      Margin="0,24,0,0"
+                      ColumnSpacing="18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
 
-        </Grid>
+                    <Border Grid.Column="0"
+                            Padding="28"
+                            CornerRadius="24"
+                            Background="{StaticResource SpaceSurfaceBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}"
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Operational overview"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+                            <TextBlock Text="One command center for discovery, quick pivots and grouped result inspection."
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="WrapWholeWords" />
 
-        <!-- ─── Status Bar ────────────────────────────────────────────────── -->
-        <Border Grid.Row="5"
+                            <Grid Margin="0,8,0,0" ColumnSpacing="14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Padding="16"
+                                        CornerRadius="18"
+                                        Background="{StaticResource SpaceSurfaceVariantBrush}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Query"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextMutedBrush}" />
+                                        <TextBlock Text="{x:Bind ViewModel.ActiveQueryText, Mode=OneWay}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="1"
+                                        Padding="16"
+                                        CornerRadius="18"
+                                        Background="{StaticResource SpaceSurfaceVariantBrush}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Best match"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextMutedBrush}" />
+                                        <TextBlock Text="{x:Bind ViewModel.TopCategoryText, Mode=OneWay}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2"
+                                        Padding="16"
+                                        CornerRadius="18"
+                                        Background="{StaticResource SpaceSurfaceVariantBrush}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Status"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextMutedBrush}" />
+                                        <TextBlock Text="{x:Bind ViewModel.ResultStateLabel, Mode=OneWay}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            Padding="24"
+                            CornerRadius="24"
+                            Background="{StaticResource SpaceSurfaceBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}"
+                            BorderThickness="1">
+                        <StackPanel Spacing="14">
+                            <TextBlock Text="Recent searches"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Text="Reusable search context for faster exploration."
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="WrapWholeWords" />
+
+                            <TextBlock Text="No searches yet. Run a query and your latest terms will appear here."
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextMutedBrush}"
+                                       TextWrapping="WrapWholeWords"
+                                       Visibility="{x:Bind ViewModel.HasRecentSearches, Mode=OneWay, Converter={StaticResource InvBoolToVis}}" />
+
+                            <ItemsRepeater ItemsSource="{x:Bind ViewModel.RecentSearches, Mode=OneWay}"
+                                           Visibility="{x:Bind ViewModel.HasRecentSearches, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Spacing="8" />
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Button Content="{x:Bind}"
+                                                Command="{x:Bind ViewModel.UseRecentSearchCommand}"
+                                                CommandParameter="{x:Bind}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Left"
+                                                Padding="14,10"
+                                                CornerRadius="16"
+                                                Background="{StaticResource SpaceSurfaceVariantBrush}"
+                                                BorderBrush="{StaticResource BorderSubtleBrush}"
+                                                BorderThickness="1"
+                                                Foreground="{StaticResource TextPrimaryBrush}" />
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      Margin="0,28,0,0">
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Spacing="18"
+                                Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                        <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                                      Width="56"
+                                      Height="56"
+                                      Foreground="{StaticResource StarWarsYellowBrush}" />
+                        <TextBlock Text="Scanning every known sector..."
+                                   FontSize="15"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center" />
+                    </StackPanel>
+
+                    <Border Padding="36"
+                            CornerRadius="24"
+                            Background="{StaticResource SpaceSurfaceBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}"
+                            BorderThickness="1"
+                            Visibility="{x:Bind ViewModel.ShowWelcome, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                        <StackPanel HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="16">
+                            <TextBlock Text="Ready for launch"
+                                       FontSize="28"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource StarWarsYellowBrush}"
+                                       HorizontalAlignment="Center" />
+                            <TextBlock Text="Start with a character, planet, film or ship and the explorer will search every resource type at once."
+                                       MaxWidth="780"
+                                       FontSize="15"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="WrapWholeWords"
+                                       TextAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="36"
+                            CornerRadius="24"
+                            Background="{StaticResource SpaceSurfaceBrush}"
+                            BorderBrush="{StaticResource BorderSubtleBrush}"
+                            BorderThickness="1"
+                            Visibility="{x:Bind ViewModel.HasNoResults, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                        <StackPanel HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="16">
+                            <TextBlock Text="No matches found"
+                                       FontSize="28"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource StarWarsYellowBrush}"
+                                       HorizontalAlignment="Center" />
+                            <TextBlock Text="Try a broader term or pivot to a nearby concept such as a planet, species or film title."
+                                       MaxWidth="720"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="WrapWholeWords"
+                                       TextAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <StackPanel Grid.Row="3"
+                            Margin="0,28,0,0"
+                            Spacing="28"
+                            Visibility="{x:Bind ViewModel.HasResults, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.ResultGroups, Mode=OneWay}">
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SearchResultGroup">
+                                <Border Padding="24"
+                                        Margin="0,0,0,22"
+                                        CornerRadius="24"
+                                        Background="{StaticResource SpaceSurfaceBrush}"
+                                        BorderBrush="{StaticResource BorderSubtleBrush}"
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="18">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" Spacing="4">
+                                                <TextBlock Text="{x:Bind CategoryHeader}"
+                                                           FontSize="22"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource StarWarsYellowBrush}" />
+                                                <TextBlock Text="{x:Bind PageInfo}"
+                                                           FontSize="13"
+                                                           Foreground="{StaticResource TextSecondaryBrush}" />
+                                            </StackPanel>
+
+                                            <Border Grid.Column="1"
+                                                    Padding="12,6"
+                                                    CornerRadius="999"
+                                                    Background="{StaticResource SpaceSurfaceVariantBrush}"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{x:Bind Items.Count}"
+                                                           FontSize="12"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextPrimaryBrush}" />
+                                            </Border>
+                                        </Grid>
+
+                                        <Rectangle Height="1"
+                                                   Fill="{StaticResource BorderSubtleBrush}" />
+
+                                        <ItemsRepeater ItemsSource="{x:Bind Items}">
+                                            <ItemsRepeater.Layout>
+                                                <UniformGridLayout MinItemWidth="300"
+                                                                   ItemsStretch="Fill"
+                                                                   MinRowSpacing="16"
+                                                                   MinColumnSpacing="16" />
+                                            </ItemsRepeater.Layout>
+                                            <ItemsRepeater.ItemTemplate>
+                                                <DataTemplate x:DataType="vm:SearchResultItem">
+                                                    <Border Background="{StaticResource SpaceSurfaceVariantBrush}"
+                                                            CornerRadius="22"
+                                                            BorderThickness="1"
+                                                            BorderBrush="{StaticResource BorderSubtleBrush}">
+                                                        <Grid RowSpacing="0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="160" />
+                                                                <RowDefinition Height="*" />
+                                                            </Grid.RowDefinitions>
+
+                                                            <Border Grid.Row="0"
+                                                                    CornerRadius="22,22,0,0">
+                                                                <Border.Background>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                        <GradientStop Color="#FF141B2E" Offset="0" />
+                                                                        <GradientStop Color="#FF0F1018" Offset="1" />
+                                                                    </LinearGradientBrush>
+                                                                </Border.Background>
+                                                                <Grid>
+                                                                    <Ellipse Width="170"
+                                                                             Height="170"
+                                                                             HorizontalAlignment="Right"
+                                                                             VerticalAlignment="Top"
+                                                                             Margin="0,-54,-48,0"
+                                                                             Fill="#12FFFFFF" />
+                                                                    <TextBlock Text="{x:Bind CategoryIcon}"
+                                                                               FontSize="48"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Opacity="0.18" />
+                                                                    <Image Source="{x:Bind ImageUrl, Converter={StaticResource StringToImageSource}}"
+                                                                           Stretch="UniformToFill"
+                                                                           HorizontalAlignment="Stretch"
+                                                                           VerticalAlignment="Stretch" />
+                                                                </Grid>
+                                                            </Border>
+
+                                                            <StackPanel Grid.Row="1"
+                                                                        Padding="18"
+                                                                        Spacing="10">
+                                                                <StackPanel Orientation="Horizontal"
+                                                                            Spacing="8">
+                                                                    <Border Padding="8,3"
+                                                                            CornerRadius="999"
+                                                                            Background="{x:Bind CategoryAccentHex, Converter={StaticResource HexToBrush}}">
+                                                                        <TextBlock Text="{x:Bind CategoryBadge}"
+                                                                                   FontSize="10"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="#FF000000" />
+                                                                    </Border>
+                                                                    <TextBlock Text="{x:Bind Category}"
+                                                                               FontSize="11"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{StaticResource TextMutedBrush}" />
+                                                                </StackPanel>
+
+                                                                <TextBlock Text="{x:Bind Name}"
+                                                                           FontSize="18"
+                                                                           FontWeight="SemiBold"
+                                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                                           TextWrapping="WrapWholeWords"
+                                                                           MaxLines="2" />
+                                                                <TextBlock Text="{x:Bind Subtitle}"
+                                                                           FontSize="13"
+                                                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                                                           TextWrapping="WrapWholeWords" />
+
+                                                                <StackPanel Spacing="5">
+                                                                    <TextBlock Text="{x:Bind Detail1}"
+                                                                               FontSize="12"
+                                                                               Foreground="{StaticResource TextMutedBrush}"
+                                                                               TextWrapping="WrapWholeWords" />
+                                                                    <TextBlock Text="{x:Bind Detail2}"
+                                                                               FontSize="12"
+                                                                               Foreground="{StaticResource TextMutedBrush}"
+                                                                               TextWrapping="WrapWholeWords" />
+                                                                    <TextBlock Text="{x:Bind Detail3}"
+                                                                               FontSize="12"
+                                                                               Foreground="{StaticResource TextMutedBrush}"
+                                                                               TextWrapping="WrapWholeWords" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsRepeater.ItemTemplate>
+                                        </ItemsRepeater>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <Border Grid.Row="2"
                 Background="{StaticResource SpaceSurfaceBrush}"
                 BorderBrush="{StaticResource BorderSubtleBrush}"
                 BorderThickness="0,1,0,0"
-                Padding="80,8">
-            <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
-                       FontSize="12"
-                       Foreground="{StaticResource TextSecondaryBrush}" />
-        </Border>
+                Padding="48,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
+                <TextBlock Grid.Column="0"
+                           Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                           FontSize="12"
+                           Foreground="{StaticResource TextSecondaryBrush}" />
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind ViewModel.FooterSummary, Mode=OneWay}"
+                           FontSize="12"
+                           Foreground="{StaticResource TextMutedBrush}" />
+            </Grid>
+        </Border>
     </Grid>
 </Page>
