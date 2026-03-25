@@ -1,3 +1,10 @@
+## ── Claude Code ──────────────────────────────────────────────────────────────
+.claude/
+.vscode
+.gitignore
+.gitattributes
+
+
 ## ── Build outputs ────────────────────────────────────────────────────────────
 [Bb]in/
 [Oo]bj/
@@ -57,5 +64,3 @@ Desktop.ini
 ## ── App logs (written at runtime to %LocalAppData%) ─────────────────────────
 *.log
 
-## ── Claude Code ──────────────────────────────────────────────────────────────
-.claude/
