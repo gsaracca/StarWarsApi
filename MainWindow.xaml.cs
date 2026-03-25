@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
@@ -15,7 +16,7 @@ public sealed partial class MainWindow : Window
 
         Title = "Star Wars Explorer";
         ExtendsContentIntoTitleBar = true;
-        SystemBackdrop = new MicaBackdrop { Kind = MicaKind.BaseAlt };
+        SystemBackdrop = new MicaBackdrop();
 
         RootPage.ViewModel = viewModel;
         SetTitleBar(RootPage.TitleBarElement);
